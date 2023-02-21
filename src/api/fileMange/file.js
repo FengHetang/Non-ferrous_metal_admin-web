@@ -1,17 +1,18 @@
 import request from '@/utils/request'
 
 // 获取所有文件
-export function getFileData(){
+export function getFileData(data){
   return(request({
-    url:"",
-    method:'get'
+    url:"/portal/upload/bsearch",
+    method:'get',
+    data:data
   }))
 }
 
 // 删除文件
 export function delFileData(data){
   return(request({
-    url:"",
+    url:"/portal/upload/deleteFile",
     method:'delete',
     data:{
       fileId:data
@@ -21,11 +22,9 @@ export function delFileData(data){
 
 export function uploadFileData(data){
   return(request({
-    url:'/portal/upload/uploadFiles/',
+    url:'/portal/upload/uploadFiles',
     method:'post',
-    data:{
-      navigationId:data
-    }
+    data:data
   }))
 }
 
