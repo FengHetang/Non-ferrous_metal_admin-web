@@ -4,7 +4,7 @@ export function getModule(data){
   return(request({
     url:'/portal/others/bsearch',
     method:'get',
-    data:data
+    params:data
   }))
 }
 

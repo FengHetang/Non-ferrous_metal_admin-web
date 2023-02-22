@@ -17,7 +17,7 @@
     <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
       <el-table-column label="标题" align="center" prop="informName" />
       <el-table-column label="时间" align="center" prop="informDate" />
-      <el-table-column label="相关信息" align="center" prop="inform" />
+      <el-table-column label="正文" align="center" prop="inform" />
       <el-table-column label="浏览人数" align="center" prop="visitNumber" />
       <el-table-column label="图片" align="center" prop="picturesUrl">
         <template slot-scope="scope">
@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="是否再轮播图中展示" align="center" prop="isShow" width="180">

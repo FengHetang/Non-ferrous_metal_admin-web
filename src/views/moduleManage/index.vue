@@ -32,8 +32,7 @@
     <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
       <el-table-column label="模块ID" align="center" prop="titleId" />
       <el-table-column label="模块名称" align="center" prop="title" />
-      <el-table-column label="岗位排序" align="center" prop="isApprove" >
-
+      <el-table-column label="是否展示" align="center" prop="isApprove" >
         <template slot-scope="scope">
           <el-tag
             :type="scope.row.isApprove === 0 ? 'danger' : 'success'"

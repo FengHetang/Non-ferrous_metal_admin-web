@@ -309,7 +309,6 @@ export default {
       this.queryParams.selectStartTime = this.dateRange[0]
       this.queryParams.selectEndTime = this.dateRange[1]
       this.getList()
-
     },
 
     // 取消按钮
