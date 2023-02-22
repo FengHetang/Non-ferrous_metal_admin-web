@@ -170,8 +170,6 @@ export default {
         partName:"",
       },
       editform: {
-        // partName: '',
-        // isApprove: 0,
         navigationId: 0,
         partId: 0,
         partName:""
@@ -180,10 +178,7 @@ export default {
       dialogFormVisible: false,
       dialogVisible:false,
       dialogEditVisible:false,
-      restaurants:
-      [],
-        // [{ "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
-        // { "value": "南拳妈妈龙虾盖浇饭", "address": "普陀区金沙江路1699号鑫乐惠美食广场A13" }],
+      restaurants: [],
       state:'',
       addNavigationId:0,
     }
