@@ -29,7 +29,7 @@ export function addPubishContentDetails(data){
 export function delPublishContent(data){
   return(request({
     url:'/portal/others/deleteOthers',
-    method:'post',
+    method:'delete',
     params:data
   }))
 }

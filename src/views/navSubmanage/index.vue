@@ -260,14 +260,13 @@ export default {
     },
     addData(){
       var data = this.form
-      console.log(data)
-      debugger;
       addSubclass(data).then((res) => {
         console.log(res)
         this.$message({
           message:'新增成功',
           type:'success',
         })
+        this.dialogFormVisible = false
         this.getNavData()
       })
     },

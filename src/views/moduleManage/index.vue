@@ -29,7 +29,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="postList">
       <el-table-column label="模块ID" align="center" prop="titleId" />
       <el-table-column label="模块名称" align="center" prop="title" />
       <el-table-column label="是否展示" align="center" prop="isApprove" >
@@ -166,7 +166,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加岗位";
+      this.title = "添加模块";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -201,7 +201,8 @@ export default {
       this.form.titleId = row.titleId
       this.form.title = row.title
       this.$modal.confirm('是否确认删除模块题目为"' + row.title + '"的数据项？').then(function() {
-        return delModule(this.form);
+        console.log()
+        return delModule(this.form)
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

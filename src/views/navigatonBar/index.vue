@@ -102,12 +102,6 @@
         <el-form-item label="导航栏名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
-<!--        <el-form-item label="是否展示" :label-width="formLabelWidth">-->
-<!--          <el-select v-model="form.region" placeholder="请选择活动区域">-->
-<!--            <el-option label="显示" value=0></el-option>-->
-<!--            <el-option label="不显示" value=1></el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -119,12 +113,6 @@
         <el-form-item label="导航栏名称" :label-width="formLabelWidth">
           <el-input v-model="editform.navigationName" autocomplete="off"></el-input>
         </el-form-item>
-<!--        <el-form-item label="是否展示" :label-width="formLabelWidth">-->
-<!--          <el-select v-model="editform.isApprove" placeholder="请选择是否展示">-->
-<!--            <el-option label="显示" value=0></el-option>-->
-<!--            <el-option label="不显示" value=1></el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogEditVisible = false">取 消</el-button>
@@ -199,33 +187,23 @@ export default {
       this.dialogVisible = true
     },
     DeleteVanigation(){
-      let data = {
-        navigationId:this.delId
-      }
-      delNavigation(data).then((res) => {
-        console.log(res)
+      delNavigation(this.delId).then((res) => {
+        // console.log(res)
         this.$message({
           message:"删除成功",
           type:'success'
         })
+        this.dialogVisible = false
         this.getNavData()
       })
     },
     addData(){
       // let time = new Date()
       var data = {
-        // "createBy":this.$store.getters.name,
-        // "createTime": time.toLocaleString(),
-        // "isApprove": this.form.region,
-        // "navigationId": 0,
         "navigationName": this.form.name,
-        // "params": {},
-        // "remark": "string",
-        // "searchValue": this.$store.getters.name,
-        // "updateBy": this.$store.getters.name,
-        // "updateTime": time.toLocaleString()
       }
       addNavigation(data).then((res) => {
+        this.dialogFormVisible = false
         this.getNavData()
         this.$message({
           message:"新增成功",

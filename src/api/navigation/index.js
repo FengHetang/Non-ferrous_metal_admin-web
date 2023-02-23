@@ -30,8 +30,8 @@ export function updateNavigation(data){
 // 删除导航栏 （暂时还有问题）
 export function delNavigation(data){
   return(request({
-    url:"/portal/navigation/{navigationId}",
+    url:"/portal/navigation/" + data,
     method:'delete',
-    data:data
+    // params:data
   }))
 }
