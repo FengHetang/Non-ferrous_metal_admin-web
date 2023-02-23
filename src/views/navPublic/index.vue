@@ -433,10 +433,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       this.$modal.confirm('是否确认删除标题为"' + row.informName + '"的数据项？').then(function() {
-        const data = {
-          informId:row.informId
-        }
-        return delNavSubMan(data);
+        return delNavSubMan(row.informId);
       }).then((res) => {
         console.log(res)
         this.getList();

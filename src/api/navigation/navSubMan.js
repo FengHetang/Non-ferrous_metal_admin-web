@@ -25,8 +25,7 @@ export function updateNavSubMan(data){
 
 export function delNavSubMan(data){
   return(request({
-    url:'/portal/infrom',
+    url:'/portal/infrom/' + data,
     method:'delete',
-    params:data
   }))
 }

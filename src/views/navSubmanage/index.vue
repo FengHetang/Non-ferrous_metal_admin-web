@@ -245,14 +245,14 @@ export default {
       this.dialogVisible = true
     },
     DeleteVanigation(){
-      let data = {
-        partId:this.delId
-      }
-      delSubclass(data).then((res) => {
+      // let data = {
+      //   partId:this.delId
+      // }
+      delSubclass(this.delId).then((res) => {
         // console.log(res)
         this.$message({
           message:"删除成功",
-          type:'error'
+          type:'success'
         })
         this.dialogVisible = false
         this.getNavData()

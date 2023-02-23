@@ -26,8 +26,8 @@ export function addSubclass(data){
 
 export function delSubclass(data){
   return(request({
-    url:'/portal/part/delete',
+    url:'/portal/part/delete/' + data,
     method:'delete',
-    params:data
+    // params:data
   }))
 }
