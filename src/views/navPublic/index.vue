@@ -44,76 +44,8 @@
           v-hasPermi="['system:post:add']"
         >新增</el-button>
       </el-col>
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="success"-->
-<!--          plain-->
-<!--          icon="el-icon-edit"-->
-<!--          size="mini"-->
-<!--          :disabled="single"-->
-<!--          @click="handleUpdate"-->
-<!--          v-hasPermi="['system:post:edit']"-->
-<!--        >修改</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="danger"-->
-<!--          plain-->
-<!--          icon="el-icon-delete"-->
-<!--          size="mini"-->
-<!--          :disabled="multiple"-->
-<!--          @click="handleDelete"-->
-<!--          v-hasPermi="['system:post:remove']"-->
-<!--        >删除</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="warning"-->
-<!--          plain-->
-<!--          icon="el-icon-download"-->
-<!--          size="mini"-->
-<!--          @click="handleExport"-->
-<!--          v-hasPermi="['system:post:export']"-->
-<!--        >导出</el-button>-->
-<!--      </el-col>-->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-
-<!--    <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">-->
-<!--      <el-table-column type="selection" width="55" align="center" />-->
-<!--      <el-table-column label="岗位编号" align="center" prop="postId" />-->
-<!--      <el-table-column label="岗位编码" align="center" prop="postCode" />-->
-<!--      <el-table-column label="岗位名称" align="center" prop="postName" />-->
-<!--      <el-table-column label="岗位排序" align="center" prop="postSort" />-->
-<!--      <el-table-column label="状态" align="center" prop="status">-->
-<!--        <template slot-scope="scope">-->
-<!--          <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-<!--      <el-table-column label="创建时间" align="center" prop="createTime" width="180">-->
-<!--        <template slot-scope="scope">-->
-<!--          <span>{{ parseTime(scope.row.createTime) }}</span>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-<!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-edit"-->
-<!--            @click="handleUpdate(scope.row)"-->
-<!--            v-hasPermi="['system:post:edit']"-->
-<!--          >修改</el-button>-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-delete"-->
-<!--            @click="handleDelete(scope.row)"-->
-<!--            v-hasPermi="['system:post:remove']"-->
-<!--          >删除</el-button>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-<!--    </el-table>-->
     <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
       <el-table-column label="标题" align="center" prop="informName" />
       <el-table-column label="时间" align="center" prop="informDate" />
@@ -341,10 +273,10 @@ export default {
       this.queryParams.partId = item.navigationId
     },
 
-    /** 查询岗位列表 */
+    /** 查询列表 */
     getList() {
-      this.loading = true;
       console.log(this.queryParams)
+      this.loading = true;
       getNavSubMan(this.queryParams).then(response => {
         console.log(response.data)
         this.postList = response.data;
@@ -373,10 +305,12 @@ export default {
       this.queryParams.pageNum = 1;
       this.queryParams.selectStartTime = this.dateRange[0]
       this.queryParams.selectEndTime = this.dateRange[1]
+
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.state = ''
       this.resetForm("queryForm");
       this.dateRange = []
       this.queryParams = {
@@ -407,15 +341,8 @@ export default {
       this.form = row
       this.open = true;
       this.title = "修改信息";
-      console.log(row)
       this.form.informId = row.informId
       this.getPartName(row.partId)
-      // const postId = row.postId || this.ids
-      // getPost(postId).then(response => {
-      //   this.form = response.data;
-      //   this.open = true;
-      //   this.title = "修改岗位";
-      // });
     },
     /** 提交按钮 */
     submitForm: function() {

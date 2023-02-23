@@ -13,13 +13,17 @@
               v-hasPermi="['system:user:add']"
             >新增</el-button>
           </el-col>
-          <el-input
-            placeholder="请输入内容"
-            size="mini"
-            style="width:20%;position: absolute;right: 0"
-            v-model="searchData">
-            <i slot="prefix" class="el-input__icon el-icon-search"></i>
-          </el-input>
+          <el-col :span="1.5">
+            <el-input
+              size="mini"
+              v-model="queryParams.partName"
+              placeholder="请输入小类名称"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-col>
+          <el-col :span="1.5"><el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button></el-col>
         </el-row>
       </el-row>
       <template #header>
@@ -162,7 +166,8 @@ export default {
       total:0,
       queryParams: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        partName:undefined
       },
       form: {
         navigationId:0,
@@ -186,6 +191,18 @@ export default {
     this.getNavData()
   },
   methods:{
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1;
+      this.getNavData();
+    },
+
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.queryParams.partName = undefined
+      this.handleQuery();
+    },
+
     async getNavBarData(){
       let data = {
         pageNum:1,
@@ -197,11 +214,7 @@ export default {
     },
 
     getNavData(){
-      let data = {
-        pageNum:this.queryParams.pageNum,
-        pageSize:this.queryParams.pageSize
-      }
-      getnavSubclass(data).then((res) => {
+      getnavSubclass(this.queryParams).then((res) => {
         this.tableData = res.data
         this.total = res.total
       })
@@ -217,7 +230,6 @@ export default {
         restaurants.push(obj);
       }
       var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
-      console.log(results)
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         cb(results);
