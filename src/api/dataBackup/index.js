@@ -11,17 +11,15 @@ export function getDataBackup(data){
 
 export function downloadData(data){
   return(request({
-    url:'/portal/backups/download',
+    url:'/portal/backups/download/'+data,
     method:'post',
-    data:data
   }))
 }
 
 export function delData(data){
   return(request({
-    url:'/portal/backups',
-    method:'post',
-    params:data
+    url:'/portal/backups/' + data,
+    method:'delete',
   }))
 }
 

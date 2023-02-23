@@ -43,16 +43,16 @@
           @click="handleAdd"
         >数据备份</el-button>
       </el-col>
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="danger"-->
-<!--          plain-->
-<!--          icon="el-icon-delete"-->
-<!--          size="mini"-->
-<!--          @click="handleDelete"-->
-<!--          v-hasPermi="['system:post:remove']"-->
-<!--        >一键删除</el-button>-->
-<!--      </el-col>-->
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          @click="OneClickDelete"
+          v-hasPermi="['system:post:remove']"
+        >一键删除</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
     <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange" >
@@ -175,10 +175,7 @@ export default {
 
     /** 下载按钮操作 */
     handleDownload(row) {
-      const data = {
-        id:row.id
-      }
-      downloadData(data).then((res) => {
+      downloadData(row.id).then((res) => {
         console.log(res)
       })
     },
@@ -189,10 +186,7 @@ export default {
     },
     /**  删除函数 **/
     deleData(id){
-      const data = {
-        id:id
-      }
-      delData(data).then((res) => {
+      delData(id).then((res) => {
         console.log(res)
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -204,9 +198,21 @@ export default {
       this.ids = selection.map(item => item.id)
       this.single = selection.length!=1
       this.multiple = !selection.length
-      console.log(this.ids)
-      /// 此处可用于 用于一键删除
     },
+    OneClickDelete(){
+      if(this.ids.length === 0) {
+        this.$message({
+          message:'请选择数据',
+          type:'error'
+        })
+      } else {
+        this.ids.forEach(function (item){
+          console.log(item)
+          // this.deleData(item)
+        })
+        this.ids = []
+      }
+    }
   }
 };
 </script>
