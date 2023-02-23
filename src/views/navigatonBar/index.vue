@@ -12,18 +12,16 @@
           >新增</el-button>
         </el-col>
         <el-col :span="1.5">
-        </el-col><el-input
-        placeholder="请输入内容"
-        size="mini"
-        style="width:20%;position: absolute;right: 0"
-        v-model="searchData">
-        <i slot="prefix" class="el-input__icon el-icon-search"></i>
-      </el-input>
-      </el-row>
-      <el-row class="mb-4" style="padding-bottom: 10px">
-        <el-col>
-
+          <el-input
+            size="mini"
+            v-model="queryParams.navigationName"
+            placeholder="请输入模块名称"
+            clearable
+            @keyup.enter.native="handleQuery"
+          />
         </el-col>
+        <el-col :span="1.5"><el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button></el-col>
       </el-row>
       <template #header>
         <div class="card-header">
@@ -146,7 +144,8 @@ export default {
         total:0,
         queryParams: {
           pageNum: 1,
-          pageSize: 10
+          pageSize: 10,
+          navigationName:undefined
         },
         form: {
           name: '',
@@ -167,13 +166,20 @@ export default {
     this.getNavData()
   },
   methods:{
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1;
+      this.getNavData();
+    },
+
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.queryParams.navigationName = undefined
+      this.handleQuery();
+    },
+
     getNavData(){
-      let data = {
-        pageNum:this.queryParams.pageNum,
-        pageSize:this.queryParams.pageSize
-      }
-      getNavigation(data).then((res) => {
-        // console.log(res)
+      getNavigation(this.queryParams).then((res) => {
         this.tableData = res.data
         this.total = res.total
       })

@@ -150,7 +150,6 @@
 <script>
 
 import { addSubclass, delSubclass, getnavSubclass, updateSubclass } from '@/api/navigation/navSubclass'
-import log from '@/views/monitor/job/log.vue'
 import { getNavigation } from '@/api/navigation'
 
 export default {
@@ -196,6 +195,7 @@ export default {
         this.restaurants = res.data
       })
     },
+
     getNavData(){
       let data = {
         pageNum:this.queryParams.pageNum,

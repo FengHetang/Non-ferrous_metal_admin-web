@@ -55,7 +55,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="roleList">
       <el-table-column label="导航栏ID">
         <template slot-scope="scope">
           <div slot="reference" class="name-wrapper">
@@ -162,6 +162,7 @@
 import { listRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus, deptTreeSelect } from "@/api/system/role";
 import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
 import {delFileData, downloadFileData, getFileData, uploadFileData} from "@/api/fileMange/file";
+import {getNavigation} from "@/api/navigation";
 
 export default {
   name: "Role",
@@ -200,28 +201,6 @@ export default {
       // 日期范围
       dateRange: [],
       // 数据范围选项
-      dataScopeOptions: [
-        {
-          value: "1",
-          label: "全部数据权限"
-        },
-        {
-          value: "2",
-          label: "自定数据权限"
-        },
-        {
-          value: "3",
-          label: "本部门数据权限"
-        },
-        {
-          value: "4",
-          label: "本部门及以下数据权限"
-        },
-        {
-          value: "5",
-          label: "仅本人数据权限"
-        }
-      ],
       // 菜单列表
       menuOptions: [],
       // 部门列表
@@ -252,13 +231,23 @@ export default {
         roleSort: [
           { required: true, message: "角色顺序不能为空", trigger: "blur" }
         ]
-      }
+      },
+      restaurants:[]
     };
   },
   created() {
     this.getList();
   },
   methods: {
+    async getNavBarData(){
+      let data = {
+        pageNum:1,
+        pageSize:100
+      }
+      await getNavigation(data).then((res) => {
+        this.restaurants = res.data
+      })
+    },
     uploadFileData,
     /** 查询文件列表 */
     getList() {

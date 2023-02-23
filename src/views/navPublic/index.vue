@@ -378,6 +378,15 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.dateRange = []
+      this.queryParams = {
+        pageNum: 1,
+        pageSize: 10,
+        informName: undefined,
+        selectStartTime: undefined,
+        selectEndTime: undefined,
+        partId: undefined
+      },
       this.handleQuery();
     },
     // 多选框选中数据
