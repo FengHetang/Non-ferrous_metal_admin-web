@@ -87,16 +87,17 @@
             v-model="state"
             :fetch-suggestions="querySearchAsync"
             placeholder="请输入所属模块"
+            :disabled=disabled
             @select="handleSelect"
           ></el-autocomplete>
         </el-form-item>
         <el-form-item label="文章标题" prop="informName">
-          <el-input v-model="form.informName" placeholder="请输入文章标题" />
+          <el-input v-model="form.informName" placeholder="请输入文章标题" :disabled=disabled />
         </el-form-item>
         <el-form-item label="正文" prop="inform">
-          <el-input type="textarea" v-model="form.inform" placeholder="请输入正文" />
+          <el-input type="textarea" v-model="form.inform" placeholder="请输入正文" :disabled=disabled />
         </el-form-item>
-        <el-form-item label="发布时间" prop="informDate">
+        <el-form-item label="发布时间" prop="informDate" :disabled=disabled>
           <el-date-picker
             v-model="form.informDate"
             type="date"
@@ -104,11 +105,11 @@
             format="yyyy 年 MM 月 dd 日">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="图片名称" prop="picturesName">
-          <el-input v-model="form.picturesName" placeholder="请输入图片名称" />
+        <el-form-item label="图片名称" prop="picturesName" >
+          <el-input v-model="form.picturesName" placeholder="请输入图片名称" :disabled=disabled />
         </el-form-item>
         <el-form-item label="图片地址" prop="picturesUrl">
-          <el-input v-model="form.picturesUrl" placeholder="请输入图片地址" />
+          <el-input v-model="form.picturesUrl" placeholder="请输入图片地址"  :disabled=disabled />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -128,11 +129,13 @@ import {
   getPublishContentDetails, updatePublishContent
 } from "@/api/otherManage";
 import { getModule } from "@/api/module";
+import id from "element-ui/src/locale/lang/id";
 export default {
   name: "Post",
   dicts: ['sys_normal_disable'],
   data() {
     return {
+      disabled:false,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -259,15 +262,10 @@ export default {
 
     /**修改 是否显示**/
     handelIsShow(row){
-      console.log(row)
-      let data = {
-        id:row.id,
-        isShow: row.isShow === '0' ? '1' : '0'
-      }
-      console.log(data)
-      changeIsShow(data).then((res) => {
+      var isShow = row.isShow === '0' ? '1' : '0'
+      changeIsShow(row.id,isShow).then((res) => {
         this.$modal.msgSuccess("修改成功");
-        // this.open = false;
+        this.open = false;
         this.getList();
       })
     },
@@ -285,6 +283,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.disabled = false
       this.reset();
     },
     // 表单重置
@@ -330,12 +329,11 @@ export default {
       this.getModuleName(this.form.titleId)
     },
     handelDetails(row) {
-      // console.log(row.id)
-      const data = {
-        id : row.id
-      }
-      getPublishContentDetails(data).then((res) => {
-        console.log(res)
+      getPublishContentDetails(row.id).then((res) => {
+        this.open = true
+        this.disabled = true
+        this.title = "详情"
+        this.form = res.data[0]
       })
     },
     /** 提交按钮 */
@@ -360,12 +358,8 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      // const postIds = row.postId || this.ids;
-      var data = {
-        id:row.id
-      }
       this.$modal.confirm('是否确认删除标题为"' + row.informName + '"的数据项？').then(function() {
-        return delPublishContent(data);
+        return delPublishContent(row.id);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
