@@ -160,6 +160,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.title = undefined
       this.handleQuery();
     },
     /** 新增按钮操作 */
@@ -198,11 +199,8 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      this.form.titleId = row.titleId
-      this.form.title = row.title
-      this.$modal.confirm('是否确认删除模块题目为"' + row.title + '"的数据项？').then(function() {
-        console.log()
-        return delModule(this.form)
+      this.$modal.confirm('是否确认删除模块名为"' + row.title + '"的数据项？').then(function() {
+        return delModule(row.titleId)
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

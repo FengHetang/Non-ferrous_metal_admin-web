@@ -26,10 +26,8 @@ export function updateModule(data){
 }
 
 export function delModule(data){
-  console.log(data)
   return(request({
-    url:'/portal/others/deleteOthersTitle',
-    methods:'delete',
-    data:data
+    url:'/portal/others/deleteOthersTitle/'+data,
+    method:'delete',
   }))
 }
