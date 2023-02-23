@@ -309,6 +309,7 @@ export default {
       this.getList();
     },
     /** 重置按钮操作 */
+
     resetQuery() {
       this.state = ''
       this.resetForm("queryForm");
