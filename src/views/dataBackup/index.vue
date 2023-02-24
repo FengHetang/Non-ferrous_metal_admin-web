@@ -1,22 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-<!--      <el-form-item label="所属小类" prop="postCode">-->
-<!--        <el-autocomplete-->
-<!--          v-model="state"-->
-<!--          :fetch-suggestions="querySearchAsync"-->
-<!--          placeholder="请输入所属小类"-->
-<!--          @select="handleSelect"-->
-<!--        ></el-autocomplete>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="关键字" prop="informName">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.informName"-->
-<!--          placeholder="请输入关键字"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
       <el-form-item>
         <el-date-picker
           v-model="dateRange"
@@ -96,8 +80,6 @@
 </template>
 
 <script>
-import {addNavSubMan, delNavSubMan, getNavSubMan, updateNavSubMan} from "@/api/navigation/navSubMan";
-import {getNavigation} from "@/api/navigation";
 import {backupData, delData, downloadData, getDataBackup} from "@/api/dataBackup";
 
 export default {
@@ -175,6 +157,7 @@ export default {
 
     /** 下载按钮操作 */
     handleDownload(row) {
+      console.log(row)
       downloadData(row.id).then((res) => {
         console.log(res)
       })
@@ -187,7 +170,6 @@ export default {
     /**  删除函数 **/
     deleData(id){
       delData(id).then((res) => {
-        console.log(res)
         this.getList();
         this.$modal.msgSuccess("删除成功");
       })
@@ -208,7 +190,7 @@ export default {
       } else {
         this.ids.forEach(function (item){
           console.log(item)
-          // this.deleData(item)
+          this.deleData(item)
         })
         this.ids = []
       }

@@ -1,5 +1,19 @@
 <template>
   <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="标题" prop="postCode">
+        <el-input
+          v-model="queryParams.informName"
+          placeholder="请输入标题关键字"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
@@ -273,6 +287,7 @@ export default {
     /** 查询岗位列表 */
     getList() {
       this.loading = true;
+      console.log(this.queryParams)
       getPublishContent(this.queryParams).then(response => {
         this.postList = response.data;
         console.log(response.data)
@@ -305,7 +320,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
+      this.queryParams.informName = ""
       this.handleQuery();
     },
     // 多选框选中数据

@@ -4,7 +4,7 @@ export function getPublishContent(data){
   return(request({
     url:'/portal/others/bsearchContent',
     method:'get',
-    data:data
+    params:data
   }))
 }
 
