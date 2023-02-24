@@ -3,30 +3,21 @@
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch">
       <el-form-item label="文件名" prop="roleName">
         <el-input
-          v-model="queryParams.roleName"
+          v-model="queryParams.fileName"
           placeholder="请输入文件名"
           clearable
           style="width: 240px"
         />
       </el-form-item>
-      <el-form-item label="导航栏的id" prop="navigationId">
-        <el-input
-          v-model="queryParams.roleKey"
-          placeholder="请输入导航栏的id"
-          clearable
-          style="width: 240px"
-        />
+      <el-form-item label="所属导航栏" prop="navigationId">
+        <el-autocomplete
+          v-model="state"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="请选择文件所属导航栏"
+          @select="handleSelect"
+        ></el-autocomplete>
       </el-form-item>
       <el-form-item label="创建时间">
-<!--        <el-date-picker-->
-<!--          v-model="dateRange"-->
-<!--          style="width: 240px"-->
-<!--          value-format="yyyy-MM-dd"-->
-<!--          type="daterange"-->
-<!--          range-separator="-"-->
-<!--          start-placeholder="开始日期"-->
-<!--          end-placeholder="结束日期"-->
-<!--        ></el-date-picker>-->
         <el-date-picker
           v-model="dateRange"
           type="daterange"
@@ -37,7 +28,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-<!--        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>-->
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
@@ -105,17 +96,6 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
           >删除</el-button>
-<!--          <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:role:edit']">-->
-<!--            <span class="el-dropdown-link">-->
-<!--              <i class="el-icon-d-arrow-right el-icon&#45;&#45;right"></i>更多-->
-<!--            </span>-->
-<!--            <el-dropdown-menu slot="dropdown">-->
-<!--              <el-dropdown-item command="handleDataScope" icon="el-icon-circle-check"-->
-<!--                                v-hasPermi="['system:role:edit']">数据权限</el-dropdown-item>-->
-<!--              <el-dropdown-item command="handleAuthUser" icon="el-icon-user"-->
-<!--                                v-hasPermi="['system:role:edit']">分配用户</el-dropdown-item>-->
-<!--            </el-dropdown-menu>-->
-<!--          </el-dropdown>-->
         </template>
       </el-table-column>
     </el-table>
@@ -130,13 +110,17 @@
     <!-- 添加 对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="addform" :rules="rules" label-width="100px">
-        <el-form-item label="导航栏ID" prop="roleName">
-          <el-input v-model="addform.navigationId" placeholder="请输入导航栏ID" />
+        <el-form-item label="所属导航栏" >
+          <el-autocomplete
+          v-model="state"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="请选择文件所属导航栏"
+          @select="handleSelect"
+          ></el-autocomplete>
         </el-form-item>
         <el-form-item>
           <el-upload
             class="upload-demo"
-            drag
             action="#"
             :multiple="false"
             :show-file-list="true"
@@ -159,8 +143,6 @@
 </template>
 
 <script>
-import { listRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus, deptTreeSelect } from "@/api/system/role";
-import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
 import {delFileData, downloadFileData, getFileData, uploadFileData} from "@/api/fileMange/file";
 import {getNavigation} from "@/api/navigation";
 
@@ -209,8 +191,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        roleName: 0,
-        roleKey: 0,
+        fileName:undefined,
+        navigationId:undefined,
         selectStartTime:null,
         selectEndTime:null
       },
@@ -232,13 +214,40 @@ export default {
           { required: true, message: "角色顺序不能为空", trigger: "blur" }
         ]
       },
-      restaurants:[]
+      restaurants:[],
+      state:''
     };
   },
   created() {
     this.getList();
   },
   methods: {
+    async querySearchAsync(queryString, cb) {
+      await this.getNavBarData()
+      let restaurants=[];
+      for(let item of this.restaurants) {
+        let obj = {
+          value: item.navigationName,
+          navigationId: item.navigationId
+        };
+        restaurants.push(obj);
+      }
+      var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        cb(results);
+      }, 3000 * Math.random());
+    },
+    createStateFilter(queryString) {
+      return (state) => {
+        return (state.value.toLowerCase().match(queryString.toLowerCase()));
+      };
+    },
+    handleSelect(item) {
+      this.queryParams.navigationId = item.navigationId
+      this.addform.navigationId = item.navigationId
+    },
+
     async getNavBarData(){
       let data = {
         pageNum:1,
@@ -248,10 +257,12 @@ export default {
         this.restaurants = res.data
       })
     },
-    uploadFileData,
+
     /** 查询文件列表 */
     getList() {
       this.loading = true;
+      this.queryParams.selectStartTime = this.dateRange[0]
+      this.queryParams.selectEndTime = this.dateRange[1]
       getFileData(this.queryParams).then((res) => {
         console.log(res)
         this.roleList = res.data;
@@ -261,25 +272,28 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const roleIds = row.fileId
       this.$modal.confirm('是否确认删除该文件？').then(function() {
-        return delFileData(fileId);
+        return delFileData(row.fileId);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
     uploadFile(){
-      uploadFileData(this.addform).then((res) => {
-        console.log(res)
+      uploadFileData(this.addform.navigationId,this.formData).then((res) => {
+        this.open = false
+        this.$message({
+          message:'文件上传成功',
+          type:'success'
+        })
+        this.getList()
       })
     },
     // 覆盖element的默认上传文件
-    uploadHttpRequest(data) {
-      let reader = new FileReader()
-      let that = this
-      this.addform.file = data.file
-      reader.readAsText(data.file)
+    uploadHttpRequest(param) {
+      let formData = new FormData();
+      formData.append('file',param.file)
+      this.formData = formData
     },
     // 限制文件上传的个数只有一个，获取上传列表的最后一个
     handleUploadChange(file, fileList) {
@@ -291,15 +305,37 @@ export default {
     /** 下载文件 */
     handleDownload(row) {
       downloadFileData(row.fileId).then((res) =>{
-        console.log(res)
+        console.log(res);
+
+        // const blob = new Blob([res.data], {type: res.headers['content-type']});
+        // let patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
+        // let result = patt.exec(res.headers['content-disposition']);
+        // let filename = decodeURI(result[1]);
+        //
+        // const downloadElement = document.createElement('a');
+        // const href = window.URL.createObjectURL(blob);
+        //
+        // console.log(filename);
+        // downloadElement.style.display = 'none';
+        // downloadElement.href = href;
+        // downloadElement.download = filename ; //下载后文件名
+        // document.body.appendChild(downloadElement);
+        // downloadElement.click(); //点击下载
+        // document.body.removeChild(downloadElement); //下载完成移除元素
+        // window.URL.revokeObjectURL(href); //释放掉blob对象
       })
     },
     handleQuery() {
-      this.queryParams.selectStartTime = this.dateRange[0]
-      this.queryParams.selectEndTime = this.dateRange[1]
       this.getList()
     },
 
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.queryParams.navigationId = undefined
+      this.queryParams.selectEndTime = null
+      this.queryParams.selectStartTime = null
+      this.handleQuery();
+    },
     // 取消按钮
     cancel() {
       this.open = false;

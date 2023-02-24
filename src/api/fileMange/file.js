@@ -5,24 +5,21 @@ export function getFileData(data){
   return(request({
     url:"/portal/upload/bsearch",
     method:'get',
-    data:data
+    params:data
   }))
 }
 
 // 删除文件
 export function delFileData(data){
   return(request({
-    url:"/portal/upload/deleteFile",
+    url:"/portal/upload/deleteFile/" + data,
     method:'delete',
-    data:{
-      fileId:data
-    }
   }))
 }
 
-export function uploadFileData(data){
+export function uploadFileData(id,data){
   return(request({
-    url:'/portal/upload/uploadFiles',
+    url:'/portal/upload/uploadFiles/' + id,
     method:'post',
     data:data
   }))
@@ -30,10 +27,7 @@ export function uploadFileData(data){
 
 export function downloadFileData(data){
   return(request({
-    url:'portal/download',
+    url:'portal/download/' + data,
     method:'post',
-    data:{
-      fileId:data
-    }
   }))
 }
