@@ -226,6 +226,10 @@ export default {
       // console.log(data)
       updateNavigation(data).then((res) => {
         this.dialogEditVisible  = false
+        this.$message({
+          message:"修改成功！",
+          type:"success"
+        })
         // console.log(res)
         this.getNavData()
       })

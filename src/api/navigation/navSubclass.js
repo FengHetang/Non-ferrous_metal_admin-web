@@ -19,7 +19,7 @@ export function updateSubclass(data){
 export function addSubclass(data){
   return(request({
     url:'/portal/part/add',
-    method:'delete',
+    method:'post',
     data:data
   }))
 }

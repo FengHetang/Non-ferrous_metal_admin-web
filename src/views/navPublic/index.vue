@@ -334,7 +334,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加岗位";
+      this.title = "添加发布内容";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
