@@ -9,6 +9,15 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="创建时间">
+        <el-date-picker
+          v-model="dateRange"
+          type="daterange"
+          value-format="yyyy-MM-dd"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -149,6 +158,8 @@ export default {
   dicts: ['sys_normal_disable'],
   data() {
     return {
+      // 日期范围
+      dateRange: [],
       disabled:false,
       // 遮罩层
       loading: true,
@@ -172,6 +183,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        selectStartTime:undefined,
+        selectEndTime:undefined,
         postCode: undefined,
         postName: undefined,
         status: undefined
@@ -287,7 +300,6 @@ export default {
     /** 查询岗位列表 */
     getList() {
       this.loading = true;
-      console.log(this.queryParams)
       getPublishContent(this.queryParams).then(response => {
         this.postList = response.data;
         console.log(response.data)
@@ -316,11 +328,16 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      this.queryParams.selectStartTime = this.dateRange[0]
+      this.queryParams.selectEndTime = this.dateRange[1]
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.queryParams.informName = ""
+      this.dateRange = []
+      this.queryParams.selectStartTime = undefined
+      this.queryParams.selectEndTime = undefined
       this.handleQuery();
     },
     // 多选框选中数据

@@ -7,6 +7,7 @@
           type="daterange"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
+          value-format="yyyy-MM-dd"
         >
         </el-date-picker>
       </el-form-item>
@@ -140,6 +141,9 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = []
+      this.queryParams.selectStartTime = undefined
+      this.queryParams.selectEndTime = undefined
       this.queryParams.pageNum = 1;
       this.getList()
     },
