@@ -144,6 +144,7 @@
 <script>
 import {addNavSubMan, delNavSubMan, getNavSubMan, updateNavSubMan} from "@/api/navigation/navSubMan";
 import {getNavigation} from "@/api/navigation";
+import {getnavSubclass} from "@/api/navigation/navSubclass";
 
 export default {
   name: "Post",
@@ -214,15 +215,15 @@ export default {
         pageSize:1000,
         title:queryString
       }
-      await getNavigation(queryParams).then((res) => {
+      await getnavSubclass(queryParams).then((res) => {
         console.log(res)
         that.restaurants = res.data
       })
       let restaurants=[];
       for(let item of this.restaurants) {
         let obj = {
-          value: item.navigationName,
-          navigationId: item.navigationId
+          value: item.partName,
+          navigationId: item.partId
         };
         restaurants.push(obj);
       }
