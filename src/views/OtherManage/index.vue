@@ -40,7 +40,10 @@
     <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
       <el-table-column label="标题" align="center" prop="informName" />
       <el-table-column label="时间" align="center" prop="informDate" />
-      <el-table-column label="正文" align="center" prop="inform" />
+      <!-- <el-table-column label="正文" align="center" prop="inform" /> -->
+      <el-form-item label="内容" prop="inform" align="center">
+          <editor v-model="form.inform" />
+        </el-form-item>
       <el-table-column label="浏览人数" align="center" prop="visitNumber" />
       <el-table-column label="图片" align="center" prop="picturesUrl">
         <template slot-scope="scope">
@@ -49,7 +52,7 @@
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ scope.row.informDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="是否再轮播图中展示" align="center" prop="isShow" width="180">
@@ -117,8 +120,11 @@
         <el-form-item label="文章标题" prop="informName">
           <el-input v-model="form.informName" placeholder="请输入文章标题" :disabled=disabled />
         </el-form-item>
-        <el-form-item label="正文" prop="inform">
+        <!-- <el-form-item label="正文" prop="inform">
           <el-input type="textarea" v-model="form.inform" placeholder="请输入正文" :disabled=disabled />
+        </el-form-item> -->
+        <el-form-item label="内容" >
+          <editor v-model="form.inform" :min-height="192" />
         </el-form-item>
         <el-form-item label="发布时间" prop="informDate" :disabled=disabled>
           <el-date-picker

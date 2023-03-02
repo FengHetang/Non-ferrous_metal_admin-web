@@ -39,11 +39,11 @@
           label="导航栏名称"
           >
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="createTime"
           label="创建时间"
         >
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           label="是否展示"
           >
@@ -64,16 +64,16 @@
 <!--          label="参数"-->
 <!--          width="180">-->
 <!--        </el-table-column>-->
-        <el-table-column
+        <!-- <el-table-column
           prop="updateBy"
           label="更新人员"
           >
-        </el-table-column>
-        <el-table-column
+        </el-table-column> -->
+        <!-- <el-table-column
           prop="updateTime"
           label="更新时间"
           >
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button

@@ -41,38 +41,38 @@
           prop="partName"
           label="名称"
         ></el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="createTime"
           label="创建时间"
-        ></el-table-column>
-        <el-table-column
-          prop="navigationId"
-          label="navigationId"
-        ></el-table-column>
-        <el-table-column
+        ></el-table-column> -->
+<!--        <el-table-column-->
+<!--          prop="navigationId"-->
+<!--          label="navigationId"-->
+<!--        ></el-table-column>-->
+        <!-- <el-table-column
           prop="partId"
           label="partId"
         ></el-table-column>
         <el-table-column
           prop="remark"
           label="remark"
-        ></el-table-column>
-        <el-table-column
+        ></el-table-column> -->
+        <!-- <el-table-column
           prop="searchValue"
           label="searchValue"
-        ></el-table-column>
-        <el-table-column
+        ></el-table-column> -->
+        <!-- <el-table-column
           prop="updateBy"
           label="更新人"
         ></el-table-column>
         <el-table-column
           prop="updateTime"
           label="更新时间"
-        ></el-table-column>
-        <el-table-column
+        ></el-table-column> -->
+        <!-- <el-table-column
           prop="createTime"
           label="创建时间"
-        ></el-table-column>
+        ></el-table-column> -->
         <el-table-column
           label="是否展示"
         >

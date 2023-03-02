@@ -127,7 +127,7 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询岗位列表 */
+    /** 查询 列表 */
     getList() {
       this.loading = true;
       getModule(this.queryParams).then(response => {
@@ -179,7 +179,7 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.title == "修改") {
+          if (this.title === "修改") {
             updateModule(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;

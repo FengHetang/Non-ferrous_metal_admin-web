@@ -45,11 +45,11 @@
       <el-table-column label="ID" align="center" prop="id" />
       <el-table-column label="时间" align="center" prop="time" />
       <el-table-column label="地址" align="center" prop="path" />
-      <el-table-column label="创建人" align="center" prop="createBy" width="180">
+      <!-- <el-table-column label="创建人" align="center" prop="createBy" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.createBy }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

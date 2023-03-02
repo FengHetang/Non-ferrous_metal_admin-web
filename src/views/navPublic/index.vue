@@ -48,10 +48,10 @@
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-    <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange" >
       <el-table-column label="标题" align="center" prop="informName" />
       <el-table-column label="时间" align="center" prop="informDate" />
-      <el-table-column label="内容" align="center" prop="inform" />
+      <el-table-column label="内容" show-overflow-tooltip align="center" prop="inform" />
       <el-table-column label="浏览人数" align="center" prop="visitNumber" />
       <el-table-column label="创建时间" align="center" prop="informDate" width="180">
         <template slot-scope="scope">
@@ -121,8 +121,9 @@
         <el-form-item label="标题" prop="informName">
           <el-input v-model="form.informName" placeholder="请输入岗位标题" />
         </el-form-item>
-        <el-form-item label="内容" prop="inform">
-          <el-input v-model="form.inform" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="内容" >
+          <editor v-model="form.inform" :min-height="192" />
+          <!-- <el-input v-model="form.inform" type="textarea" placeholder="请输入内容" /> -->
         </el-form-item>
         <el-form-item label="发布时间" prop="informDate">
           <el-date-picker
@@ -247,23 +248,23 @@ export default {
         pageSize:1000,
       }
       let restaurants = []
-      await getNavigation(queryParams).then((res) => {
+      await getnavSubclass(queryParams).then((res) => {
         console.log(res)
         restaurants = res.data
       })
       let restaurant = [];
       for(let item of restaurants) {
         let obj = {
-          value: item.navigationId,
-          navigationName: item.navigationName
+          value: item.partId,
+          partIName: item.partName
         };
         restaurant.push(obj);
       }
       // console.log(restaurant)
       var results = id ? restaurant.filter(this.createStateFilters(id)) : restaurant;
-      // console.log(results)
+      console.log(results)
       // debugger
-      this.state = results[0].navigationName
+      this.state = results[0].partIName
     },
     createStateFilters(queryString) {
       return (state) => {
@@ -272,8 +273,9 @@ export default {
     },
 
     handleSelect(item) {
-      this.form.partId = item.navigationId
-      this.queryParams.partId = item.navigationId
+      console.log(item, '!!!!!!!!!!!!!!!!!!@')
+      this.form.partId = item.partId
+      this.queryParams.partId = item.partId
     },
 
     /** 查询列表 */
@@ -346,10 +348,12 @@ export default {
       this.open = true;
       this.title = "修改信息";
       this.form.informId = row.informId
+      // console.log(row)
       this.getPartName(row.partId)
     },
     /** 提交按钮 */
     submitForm: function() {
+      console.log(this.$refs["form"].validate);
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.title === "修改信息" ) {
