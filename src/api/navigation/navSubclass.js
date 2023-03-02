@@ -30,3 +30,10 @@ export function delSubclass(data){
     method:'delete',
   }))
 }
+
+export function updateNavPubState(id,state){
+  return request({
+    url:'/portal/others/updateIsTop/' + id +'/' + state,
+    method:'put'
+  })
+}

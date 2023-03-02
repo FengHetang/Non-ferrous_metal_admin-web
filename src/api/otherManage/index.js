@@ -44,3 +44,12 @@ export function changeIsShow(id,isshow){
     method:'put',
   }))
 }
+
+
+export function updatePublicState(id,state){
+  return request({
+    // url:'/portal/others/updatelsTop/' + id + '/' + state,
+    url:'/portal/others/updateIsTop/' + id +'/' + state,
+    method:'put'
+  })
+}

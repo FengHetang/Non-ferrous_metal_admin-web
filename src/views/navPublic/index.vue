@@ -28,7 +28,6 @@
         >
         </el-date-picker>
       </el-form-item>
-
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -58,6 +57,13 @@
           <span>{{ scope.row.informDate }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="是否置顶" align="center" prop="isTop" >
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.isTop === 0 ? 'danger' : 'success'">
+            {{scope.row.isTop === 0 ? '不置顶' : '置顶'}}
+          </el-tag>
+        </template>
+      </el-table-column>
 <!--      <el-table-column label="是否展示" align="center" prop="isShow" width="180">-->
 <!--        <template slot-scope="scope">-->
 <!--          <el-tag :type="scope.row.isShow === '0' ? 'danger' : 'success'">-->
@@ -68,20 +74,13 @@
 <!--      </el-table-column>-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            :icon="scope.row.isShow === '0' ? 'el-icon-open' : 'el-icon-turn-off'"-->
-<!--            @click="handelIsShow(scope.row)"-->
-<!--            v-hasPermi="['system:post:edit']"-->
-<!--          >{{scope.row.isShow === '0' ? '修改为显示' : '修改为不显示'}}</el-button>-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-search"-->
-<!--            @click="handelDetails(scope.row)"-->
-<!--            v-hasPermi="['system:post:edit']"-->
-<!--          >详情</el-button>-->
+          <el-button
+            size="mini"
+            type="text"
+            :icon="scope.row.isTop === 0 ? 'el-icon-upload2' : 'el-icon-download'"
+            @click="updateState(scope.row)"
+            v-hasPermi="['system:post:edit']"
+          >{{scope.row.isTop === 0 ? '修改为置顶' : '修改为不置顶'}}</el-button>
           <el-button
             size="mini"
             type="text"
@@ -145,7 +144,8 @@
 <script>
 import {addNavSubMan, delNavSubMan, getNavSubMan, updateNavSubMan} from "@/api/navigation/navSubMan";
 import {getNavigation} from "@/api/navigation";
-import {getnavSubclass} from "@/api/navigation/navSubclass";
+import {getnavSubclass, updateNavPubState} from "@/api/navigation/navSubclass";
+import {updatePublicState} from "@/api/otherManage";
 
 export default {
   name: "Post",
@@ -208,6 +208,20 @@ export default {
     this.getList();
   },
   methods: {
+    /** 修改是否置顶**/
+    updateState(row){
+      console.log(row)
+      const istop = row.isTop === 0 ? 1 : 0
+      console.log(istop)
+      updateNavPubState(row.id,istop).then((res)=> {
+        console.log(res)
+        this.$message({
+          type:"success",
+          message:"修改成功"
+        })
+        this.getList()
+      })
+    },
     /** 模块名远程搜索 **/
     async querySearchAsync(queryString, cb) {
       let that = this
@@ -273,9 +287,8 @@ export default {
     },
 
     handleSelect(item) {
-      console.log(item, '!!!!!!!!!!!!!!!!!!@')
-      this.form.partId = item.partId
-      this.queryParams.partId = item.partId
+      this.form.partId = item.navigationId
+      this.queryParams.partId = item.navigationId
     },
 
     /** 查询列表 */

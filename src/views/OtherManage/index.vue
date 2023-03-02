@@ -40,7 +40,13 @@
     <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
       <el-table-column label="标题" align="center" prop="informName" />
       <el-table-column label="时间" align="center" prop="informDate" />
-      <!-- <el-table-column label="正文" align="center" prop="inform" /> -->
+      <el-table-column label="是否置顶" align="center" prop="isTop" >
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.isTop === 0 ? 'danger' : 'success'">
+            {{scope.row.isTop === 0 ? '不置顶' : '置顶'}}
+          </el-tag>
+        </template>
+      </el-table-column>>
       <el-form-item label="内容" prop="inform" align="center">
           <editor v-model="form.inform" />
         </el-form-item>
@@ -72,6 +78,13 @@
             @click="handelIsShow(scope.row)"
             v-hasPermi="['system:post:edit']"
           >{{scope.row.isShow === '0' ? '修改为显示' : '修改为不显示'}}</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            :icon="scope.row.isTop === 0 ? 'el-icon-upload2' : 'el-icon-download'"
+            @click="updateState(scope.row)"
+            v-hasPermi="['system:post:edit']"
+          >{{scope.row.isTop === 0 ? '修改为置顶' : '修改为不置顶'}}</el-button>
           <el-button
             size="mini"
             type="text"
@@ -155,7 +168,7 @@ import {
   addPubishContentDetails, changeIsShow,
   delPublishContent,
   getPublishContent,
-  getPublishContentDetails, updatePublishContent
+  getPublishContentDetails, updatePublicState, updatePublishContent
 } from "@/api/otherManage";
 import { getModule } from "@/api/module";
 import id from "element-ui/src/locale/lang/id";
@@ -225,6 +238,20 @@ export default {
     this.getList();
   },
   methods: {
+    /** 修改是否置顶**/
+    updateState(row){
+      console.log(row)
+      const istop = row.isTop === 0 ? 1 : 0
+      console.log(istop)
+      updatePublicState(row.id,istop).then((res)=> {
+        console.log(res)
+        this.$message({
+          type:"success",
+          message:"修改成功"
+        })
+        this.getList()
+      })
+    },
     /** 模块名远程搜索 **/
     async querySearchAsync(queryString, cb) {
       let that = this
