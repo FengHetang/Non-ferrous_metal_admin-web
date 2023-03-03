@@ -173,7 +173,7 @@ export default {
       // 获取富文本组件实例
       let quill = this.Quill;
       // 如果上传成功
-      if (res.code == 200) {
+      if (res.code === 200) {
         // 获取光标所在位置
         let length = quill.getSelection().index;
         // 插入图片  res.url为服务器返回的图片地址

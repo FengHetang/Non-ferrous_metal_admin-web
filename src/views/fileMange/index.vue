@@ -64,7 +64,7 @@
       <el-table-column label="文件名称" width="300">
         <template slot-scope="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag size="medium">{{ scope.row.realFileName }}</el-tag>
+              <el-tag size="medium">{{ scope.row.fileName }}</el-tag>
             </div>
         </template>
       </el-table-column>>
@@ -77,11 +77,6 @@
           </div>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope" v-if="scope.row.roleId !== 1">
           <el-button
@@ -311,7 +306,7 @@ export default {
       const link = document.createElement('a')
       link.style.display = 'none'
       link.href = url
-      link.setAttribute('download', row.realFileName)
+      link.setAttribute('download', row.fileName)
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)

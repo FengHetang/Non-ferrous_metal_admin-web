@@ -14,6 +14,7 @@ export function downloadData(data){
     url:'/portal/backups/download/'+data,
     method:'post',
     responseType: 'arraybuffer',
+    timeout:100 * 1000
   }))
 }
 

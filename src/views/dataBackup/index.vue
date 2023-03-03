@@ -162,8 +162,12 @@ export default {
 
     /** 下载按钮操作 */
     handleDownload(row) {
+      this.$message({
+        type:"warning",
+        message:"开始下载"
+      })
       downloadData(row.id).then((res) => {
-        console.log(res)
+        // console.log(res)
         const data = res
         const url = window.URL.createObjectURL(new Blob([data], { type: 'application/zip' }))
         const link = document.createElement('a')

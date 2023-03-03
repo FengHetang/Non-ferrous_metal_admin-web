@@ -33,7 +33,7 @@ export function delSubclass(data){
 
 export function updateNavPubState(id,state){
   return request({
-    url:'/portal/navigation/updateIsTop/' + id +'/' + state,
+    url:'/portal/infrom/updateIsTop/' + id +'/' + state,
     method:'put'
   })
 }

@@ -64,14 +64,6 @@
           </el-tag>
         </template>
       </el-table-column>
-<!--      <el-table-column label="是否展示" align="center" prop="isShow" width="180">-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-tag :type="scope.row.isShow === '0' ? 'danger' : 'success'">-->
-<!--            {{scope.row.isShow === '0' ? '不显示' : '显示'}}-->
-<!--          </el-tag>-->
-<!--          <span>{{ parseTime(scope.row.createTime) }}</span>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -118,14 +110,14 @@
           ></el-autocomplete>
         </el-form-item>
         <el-form-item label="标题" prop="informName">
-          <el-input v-model="form.informName" placeholder="请输入岗位标题" />
+          <el-input v-model="form.informName" placeholder="请输入标题" />
         </el-form-item>
-        <el-form-item label="内容" >
-          <editor v-model="form.inform" :min-height="192" />
-          <!-- <el-input v-model="form.inform" type="textarea" placeholder="请输入内容" /> -->
+        <el-form-item label="内容" prop="inform" >
+          <editor v-model="form.inform" :min-height="192"  ref="quillEditor" />
         </el-form-item>
         <el-form-item label="发布时间" prop="informDate">
           <el-date-picker
+
             v-model="form.informDate"
             type="date"
             placeholder="选择日期"
@@ -142,6 +134,7 @@
 </template>
 
 <script>
+import { quillEditor } from "vue-quill-editor";
 import {addNavSubMan, delNavSubMan, getNavSubMan, updateNavSubMan} from "@/api/navigation/navSubMan";
 import {getNavigation} from "@/api/navigation";
 import {getnavSubclass, updateNavPubState} from "@/api/navigation/navSubclass";
@@ -212,9 +205,9 @@ export default {
     updateState(row){
       console.log(row)
       const istop = row.isTop === 0 ? 1 : 0
+      console.log(row)
       console.log(istop)
-      updateNavPubState(row.id,istop).then((res)=> {
-        console.log(res)
+      updateNavPubState(row.informId,istop).then((res)=> {
         this.$message({
           type:"success",
           message:"修改成功"
