@@ -305,22 +305,23 @@ export default {
     /** 下载文件 */
     async handleDownload(row) {
       const res = await downloadFileData(row.fileId)
-      const blob = new Blob([res.data], {type: res.headers['content-type']});
-      let patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
-      let result = patt.exec(res.headers['content-disposition']);
-      let filename = decodeURI(result[1]);
-      console.log();
-      const downloadElement = document.createElement('a');
-      const href = window.URL.createObjectURL(blob);
-      
-      console.log(filename);
-      downloadElement.style.display = 'none';
-      downloadElement.href = href;
-      downloadElement.download = filename ; //下载后文件名
-      document.body.appendChild(downloadElement);
-      downloadElement.click(); //点击下载
-      document.body.removeChild(downloadElement); //下载完成移除元素
-      window.URL.revokeObjectURL(href); //释放掉blob对象
+      console.log(res)
+      // const blob = new Blob([res.data], {type: res.headers['content-type']});
+      // let patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
+      // let result = patt.exec(res.headers['content-disposition']);
+      // let filename = decodeURI(result[1]);
+      // console.log();
+      // const downloadElement = document.createElement('a');
+      // const href = window.URL.createObjectURL(blob);
+      //
+      // console.log(filename);
+      // downloadElement.style.display = 'none';
+      // downloadElement.href = href;
+      // downloadElement.download = filename ; //下载后文件名
+      // document.body.appendChild(downloadElement);
+      // downloadElement.click(); //点击下载
+      // document.body.removeChild(downloadElement); //下载完成移除元素
+      // window.URL.revokeObjectURL(href); //释放掉blob对象
     },
     handleQuery() {
       this.getList()

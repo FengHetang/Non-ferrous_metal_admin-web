@@ -25,9 +25,11 @@ export function uploadFileData(id,data){
   }))
 }
 
+
 export function downloadFileData(data){
   return(request({
     url:'/portal/download/' + data,
     method:'post',
   }))
 }
+
