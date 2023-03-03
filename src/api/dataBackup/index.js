@@ -13,6 +13,7 @@ export function downloadData(data){
   return(request({
     url:'/portal/backups/download/'+data,
     method:'post',
+    responseType: 'arraybuffer',
   }))
 }
 

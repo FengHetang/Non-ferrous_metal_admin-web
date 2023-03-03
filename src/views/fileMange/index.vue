@@ -304,24 +304,21 @@ export default {
 
     /** 下载文件 */
     async handleDownload(row) {
+      // console.log(row)
       const res = await downloadFileData(row.fileId)
-      console.log(res)
-      // const blob = new Blob([res.data], {type: res.headers['content-type']});
-      // let patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
-      // let result = patt.exec(res.headers['content-disposition']);
-      // let filename = decodeURI(result[1]);
-      // console.log();
-      // const downloadElement = document.createElement('a');
-      // const href = window.URL.createObjectURL(blob);
-      //
-      // console.log(filename);
-      // downloadElement.style.display = 'none';
-      // downloadElement.href = href;
-      // downloadElement.download = filename ; //下载后文件名
-      // document.body.appendChild(downloadElement);
-      // downloadElement.click(); //点击下载
-      // document.body.removeChild(downloadElement); //下载完成移除元素
-      // window.URL.revokeObjectURL(href); //释放掉blob对象
+      const data = res
+      const url = window.URL.createObjectURL(new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}))
+      const link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.setAttribute('download', row.realFileName)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      this.$message({
+        type:"success",
+        message:"下载成功！"
+      })
     },
     handleQuery() {
       this.getList()

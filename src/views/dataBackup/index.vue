@@ -82,6 +82,7 @@
 
 <script>
 import {backupData, delData, downloadData, getDataBackup} from "@/api/dataBackup";
+import {downloadFileData} from "@/api/fileMange/file";
 
 export default {
   name: "Post",
@@ -161,9 +162,21 @@ export default {
 
     /** 下载按钮操作 */
     handleDownload(row) {
-      console.log(row)
       downloadData(row.id).then((res) => {
         console.log(res)
+        const data = res
+        const url = window.URL.createObjectURL(new Blob([data], { type: 'application/zip' }))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', row.path.split('/')[row.path.split('/').length - 1])
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        this.$message({
+          type:"success",
+          message:"下载成功！"
+        })
       })
     },
 
